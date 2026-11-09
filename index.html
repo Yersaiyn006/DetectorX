@@ -1,0 +1,85 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Detecor X — детектор ИИ-текста</title><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"><style>
+:root{--bg:#f3f4fa;--sf:rgba(255,255,255,.82);--tx:#14162a;--mu:#5d6280;--bd:#dcdfee;--ac:#6d4aff;--ac2:#00a9c9;--ok:#14a05a;--wa:#d98e00;--bad:#e5384f;--g1:rgba(109,74,255,.16);--g2:rgba(0,169,201,.14);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#090a14;--sf:rgba(20,22,44,.78);--tx:#eceefc;--mu:#9a9fc4;--bd:#272a4d;--ac:#8b6dff;--ac2:#22d3ee;--ok:#34d399;--wa:#fbbf24;--bad:#fb5a73;--g1:rgba(139,109,255,.22);--g2:rgba(34,211,238,.14);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#090a14;--sf:rgba(20,22,44,.78);--tx:#eceefc;--mu:#9a9fc4;--bd:#272a4d;--ac:#8b6dff;--ac2:#22d3ee;--ok:#34d399;--wa:#fbbf24;--bad:#fb5a73;--g1:rgba(139,109,255,.22);--g2:rgba(34,211,238,.14);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(60rem 30rem at 85% -10%,var(--g1),transparent 60%),radial-gradient(50rem 30rem at -10% 20%,var(--g2),transparent 60%),var(--bg);color:var(--tx);font:16px/1.55 "Space Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:44px 44px;opacity:.28;-webkit-mask-image:radial-gradient(circle at 50% 0,#000,transparent 70%);mask-image:radial-gradient(circle at 50% 0,#000,transparent 70%);pointer-events:none;z-index:-1}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.lg{width:46px;height:46px;flex:none;filter:drop-shadow(0 4px 14px var(--g1))}
+.brand b{font-size:22px;letter-spacing:.3px;display:block;line-height:1.1}.brand b i{font-style:normal;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand small{color:var(--mu);font-size:12px}
+.tabs{display:flex;gap:6px;background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:4px;backdrop-filter:blur(10px)}
+.tabs button{border:0;background:none;color:var(--mu);font:inherit;font-size:14px;padding:8px 14px;border-radius:10px;cursor:pointer}
+.tabs button.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}
+.tabs em{font-style:normal;font-size:11px;opacity:.8;margin-left:4px}
+h1{font-size:clamp(26px,5.5vw,44px);line-height:1.1;margin:18px 0 10px;letter-spacing:-.5px}
+h1 span{background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mu);max-width:640px;margin:0 0 20px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:20px;padding:16px;backdrop-filter:blur(12px);margin-bottom:16px}
+textarea{width:100%;min-height:210px;resize:vertical;background:transparent;border:1px dashed var(--bd);border-radius:14px;color:var(--tx);font:inherit;font-size:16px;padding:14px;outline:none}
+textarea:focus{border-color:var(--ac);border-style:solid}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}.row .sp{flex:1}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;color:var(--mu)}
+.btn{border:1px solid var(--bd);background:transparent;color:var(--tx);font:inherit;font-size:14px;padding:10px 16px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--ac)}
+.btn.p{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;font-weight:700;padding:12px 24px;box-shadow:0 8px 24px var(--g1)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{font-size:12px;border:1px solid var(--bd);border-radius:99px;padding:4px 11px;color:var(--mu)}
+h3{margin:0 0 10px;font-size:18px}
+.pt{display:flex;gap:10px;padding:10px 12px;border-radius:12px;margin-bottom:8px;background:var(--g2);font-size:15px}
+.pt.s{background:rgba(229,56,79,.1)}.pt.g{background:rgba(20,160,90,.1)}.pt.n{background:rgba(217,142,0,.12)}
+.fr{padding:12px 0;border-top:1px solid var(--bd)}.fr:first-child{border:0}
+.fh{display:flex;justify-content:space-between;gap:8px;font-size:14px}.fh span{font-family:"JetBrains Mono",monospace;color:var(--mu)}
+.br{height:6px;border-radius:9px;background:var(--bd);margin:7px 0;overflow:hidden}.br i{display:block;height:100%;border-radius:9px}
+.fr p{margin:0;font-size:14px;color:var(--mu)}
+.hl{white-space:pre-wrap;word-break:break-word;font-size:15px;line-height:1.8;max-height:420px;overflow:auto;border:1px solid var(--bd);border-radius:14px;padding:12px}
+.hl .h2{background:rgba(224,160,0,.28);border-radius:4px}.hl .h3{background:rgba(229,56,79,.3);border-radius:4px}
+.vd{display:flex;gap:20px;align-items:center;flex-wrap:wrap;border:1px solid var(--ac);box-shadow:0 0 40px var(--g1)}
+.gauge{position:relative;width:150px;height:150px;flex:none}.gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge .n{position:absolute;inset:0;display:grid;place-items:center;font-size:36px;font-weight:700;text-align:center;line-height:1}.gauge .n small{display:block;font-size:11px;color:var(--mu);font-weight:400;margin-top:4px}
+.vt{flex:1;min-width:220px}.vt h2{margin:0 0 6px;font-size:clamp(20px,4vw,26px);line-height:1.2}.vt p{margin:0 0 8px;color:var(--mu);font-size:14px}
+.hi{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--bd)}.hi:first-of-type{border:0}
+.bd{font-weight:700;font-family:"JetBrains Mono",monospace;min-width:54px;text-align:center;padding:8px;border-radius:10px;color:#fff;flex:none}
+.hi .m{flex:1;min-width:0}.hi .m b{display:block;font-weight:500;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ok{color:var(--ok)}.wa{color:var(--wa)}.bad{color:var(--bad)}
+.hide{display:none!important}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:12px;font-size:14px;z-index:9}
+.note{font-size:12px;color:var(--mu);margin-top:10px}
+@media (max-width:560px){.btn.p{width:100%;justify-content:center}.lg{width:40px;height:40px}.vd{justify-content:center;text-align:center}}
+
+.mu{color:var(--mu);font-size:13px}.logo i{color:var(--ac)}.sp{flex:1}.btn.p{font-weight:700}.gauge b{position:absolute;inset:0;display:grid;place-items:center;font-size:34px}.br{position:relative}.br i{position:absolute;top:0;bottom:0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:12px}.st{text-align:center}.st b{display:block;font-size:28px}.st span{color:var(--mu);font-size:12px}.top a{color:var(--ac)}.hide{display:none}.h2{background:rgba(224,160,0,.3)}.h3{background:rgba(229,56,79,.3)}.gauge svg{transform:rotate(-90deg)}.hl{white-space:pre-wrap}.pt{display:block}.br i{height:100%} .row{margin-top:12px} .brand{gap:12px} .brand b{font-size:22px} .card{margin-bottom:16px} .wrap{max-width:980px} .lead{max-width:740px} .top{margin-bottom:24px} .tabs button{cursor:pointer} .btn{cursor:pointer} .gauge{width:150px;height:150px} .gauge b{color:var(--tx)} .toast{z-index:30} </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b6dff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<symbol id="lg" viewBox="0 0 64 64">
+<path d="M32 3 59 18.500v27L32 61 5 45.500v-27Z" fill="none" stroke="url(#gr)" stroke-width="3" stroke-linejoin="round" stroke-dasharray="150 12"/>
+<path d="M19 19C30 22 34 42 45 45.500" fill="none" stroke="url(#gr)" stroke-width="5.500" stroke-linecap="round"/>
+<path d="M45 19 19 45.500" fill="none" stroke="url(#gr)" stroke-width="5.500" stroke-dasharray="6 5"/>
+<rect x="29.500" y="29.500" width="5" height="5" rx="1" fill="#22d3ee"/>
+</symbol></defs></svg><div class="wrap"><header class="top"><div class="brand"><svg class="lg"><use href="#lg"/></svg><div><b>Detecor <i>X</i></b><small>Детектор ИИ-текста · RU · EN · KK</small></div></div><div class="tabs"><span class="mono" id="mi">Загрузка модели…</span><button id="th" aria-label="Сменить тему">◐</button></div></header><section><h1>Не просто «да/нет», а <span>доказательства</span></h1><p class="lead">Анализируйте тексты, программный код и документы. Detecor X показывает подозрительные признаки, объясняет оценку и помогает сделать собственный вывод.</p><div class="card" id="drop"><textarea id="in" placeholder="Вставьте текст на русском, English или қазақша…" spellcheck="false"></textarea><div class="row"><span class="mono" id="fn">Текст или код</span><span class="sp"></span><label class="btn">📎 Файл<input type="file" id="fl" hidden></label><button class="btn" id="clr">Очистить</button><button class="btn p" id="go">Анализировать</button></div><div class="note">Анализ выполняется в браузере. Содержимое файлов не отправляется на сервер; загружаются только публичные веса модели.</div></div><div id="res"></div></section></div><div class="toast hide" id="ts"></div><script src="/engine.js"></script><script>const $=s=>document.querySelector(s);let name="";
+const toast=m=>{const t=$("#ts");t.textContent=m;t.classList.remove("hide");clearTimeout(toast.i);toast.i=setTimeout(()=>t.classList.add("hide"),3500)};
+DX.load('/model.json').then(m=>$("#mi").textContent=m.meta&&m.meta.n?"модель обучена на "+m.meta.n+" примерах":"базовая модель");
+async function pick(f){if(!f)return;try{const t=await DX.readFile(f);if(DX.wc(t)<3)throw new Error("В файле не найден текст");$("#in").value=t.slice(0,200000);name=f.name;$("#fn").textContent="📄 "+f.name;toast("Файл загружен, нажмите «Анализировать»")}catch(e){toast(e.message)}}
+$("#fl").onchange=e=>{pick(e.target.files[0]);e.target.value=""};
+addEventListener("dragover",e=>e.preventDefault());addEventListener("drop",e=>{e.preventDefault();pick(e.dataTransfer.files[0])});
+$("#clr").onclick=()=>{$("#in").value="";name="";$("#fn").textContent="";$("#res").innerHTML=""};
+const col=p=>p>=58?"var(--bad)":p>=42?"var(--wa)":"var(--ok)";
+$("#go").onclick=()=>{const t=$("#in").value.trim();if(DX.wc(t)<8)return toast("Введите хотя бы пару предложений или несколько строк кода");render(t)};
+function render(t){const r=DX.analyze(t,name),p=Math.round(r.p),v=DX.verdict(p),code=r.mode==="code",
+ S=[...r.F].sort((a,b)=>Math.abs(b.c)-Math.abs(a.c)),ai=S.filter(f=>f.c>.15).slice(0,3),hu=S.filter(f=>f.c<-.15).slice(0,2),
+ row=(f,c,i)=>'<div class="pt '+c+'">'+i+' <b>'+f.k+'</b> · '+DX.esc(f.v)+'. <span class="mu">'+f.h+'</span></div>',
+ sgm=DX.segs(t,r.mode),pv=sgm.filter(x=>x.p!=null),hs=pv.filter(x=>x.p>=58).length,w=[];
+ if(r.conf<.5)w.push(code?"Мало строк кода: оценка ненадёжна.":"Текст короче ~120 слов: оценка ненадёжна и сдвинута к середине.");
+ if(code)w.push("Код часто пишут по шаблонам и форматируют автоматически, поэтому для кода оценка менее точна, чем для текста.");
+ if(p>=42&&p<58)w.push("Зона неопределённости: признаки противоречат друг другу, возможно смешанное авторство.");
+ $("#res").innerHTML='<div class="card vd"><div class="gauge"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--bd)" stroke-width="10"/><circle cx="60" cy="60" r="52" fill="none" stroke="'+col(p)+'" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="'+326.7*(1-p/100)+'"/></svg><b>'+p+'%</b></div><div style="flex:1;min-width:200px"><div class="mu">ВЕРДИКТ · вероятность ИИ</div><h2 class="'+v[1]+'" style="margin:4px 0">'+v[0]+'</h2><p class="mu" style="margin:0">Это оценка вероятности, а не доказательство. Сверьте с разбором ниже.</p></div></div>'+
+ '<div class="card"><h3 style="margin-top:0">Краткий разбор</h3><div class="chips"><span class="chip">'+(code?"Код":"Текст")+'</span>'+(code?"":'<span class="chip">'+(DX.langs(t).join(" · ")||"язык не определён")+'</span>')+'<span class="chip">'+(code?r.n+" строк":r.n+" слов")+'</span><span class="chip">достаточность данных: '+Math.round(r.conf*100)+'%</span></div>'+
+ ai.map(f=>row(f,"s","⚠")).join("")+(r.found.length?'<div class="pt s">🔎 Клише: '+r.found.slice(0,5).map(x=>"«"+DX.esc(x[0])+"»×"+x[1]).join(", ")+'</div>':"")+hu.map(f=>row(f,"g","✓")).join("")+
+ (pv.length?'<div class="pt">▦ Подозрительных фрагментов: '+hs+' из '+pv.length+'</div>':"")+w.map(x=>'<div class="pt">ⓘ '+x+'</div>').join("")+'<button class="btn" id="dp">Углублённый разбор ▾</button></div>'+
+ '<div class="card hide" id="deep"><h3 style="margin-top:0">Все признаки</h3>'+S.map(f=>{const x=Math.min(50,Math.abs(f.c)*25);return'<div style="padding:9px 0;border-top:1px solid var(--bd)"><div style="display:flex;justify-content:space-between;font-size:14px"><b>'+f.k+'</b><span class="mu">'+DX.esc(f.v)+'</span></div><div class="br"><i style="left:'+(f.c>0?50:50-x)+'%;width:'+x+'%;background:'+(f.c>0?"var(--bad)":"var(--ok)")+'"></i></div><div class="mu">'+f.h+' · '+(f.c>0?"→ к ИИ":"→ к человеку")+'</div></div>'}).join("")+
+ '<h3>Подсветка</h3><div class="mu" style="margin-bottom:8px"><span class="h2">&nbsp;жёлтый&nbsp;</span> — сомнительно · <span class="h3">&nbsp;красный&nbsp;</span> — похоже на ИИ</div><div class="hl">'+sgm.map(x=>x.p==null||x.p<50?DX.esc(x.t):'<span class="'+(x.p>=62?"h3":"h2")+'" title="ИИ ≈ '+Math.round(x.p)+'%">'+DX.esc(x.t)+'</span>').join("")+'</div></div>';
+ $("#dp").onclick=()=>$("#deep").classList.toggle("hide");$("#res").scrollIntoView({behavior:"smooth"})}
+
+ document.getElementById('th').onclick=()=>{const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'};document.addEventListener('visibilitychange',()=>{if(!document.hidden)DX.load('/model.json').then(m=>document.getElementById('mi').textContent=m.meta?.n?'Обучено: '+m.meta.n:'Базовая модель')});</script></body></html>
